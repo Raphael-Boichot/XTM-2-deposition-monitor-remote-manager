@@ -2,7 +2,7 @@
 
 A GNU Octave code to manage an INFICON XTM/2 Deposition Monitor in RS-232
 
-Because even completely outdated devices allow to do good science, here is a complete code to drive this INFICON monitor at about 10 samples/seconds. The code is written with [GNU Octave](https://octave.org/) to ensure an easy access to people not wanting to pay a Matlab licence. I've tried this code both with physical DB9/DB9 serial cable and USB to DB9 serial cable.
+Because even completely outdated devices allow to do good science, here is a complete code to drive this INFICON monitor at about 10 samples/seconds. The code is written with [GNU Octave](https://octave.org/) to ensure an easy access to people not wanting to pay a Matlab licence. The code may be easily ported to Matlab anyway. I've tried this code both with physical DB9/DB9 serial cable and USB to DB9 serial cable. The pain essentially comes from reading the documentation cover to cover to understand the role of parameters.
 
 Here what the code does:
 - It scans all serial ports seeking for a known response after an Hello signal;

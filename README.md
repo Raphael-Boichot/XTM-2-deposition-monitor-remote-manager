@@ -2,7 +2,7 @@
 
 A GNU Octave code to manage an INFICON XTM/2 Deposition Monitor in RS-232
 
-Because even completely outdated devices allow to do good science, here is a complete code to drive this INFICON monitor at about 10 samples/seconds. The code is written with [GNU Octave](https://octave.org/) to ensure an easy access to commands.
+Because even completely outdated devices allow to do good science, here is a complete code to drive this INFICON monitor at about 10 samples/seconds. The code is written with [GNU Octave](https://octave.org/) to ensure an easy access to people not wanting to pay a Matlab licence.
 
 Here what the code does:
 - It scans all serial ports seeking for a response with an Hello signal;

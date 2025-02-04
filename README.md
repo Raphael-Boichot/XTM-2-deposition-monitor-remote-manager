@@ -13,6 +13,8 @@ Here what the code does:
 
 This discontinued monitor does not allow to change the measurement units via RS232 protocol, so you have to modify DIP switches in the back.
 
+The code contains all necessary comments to make a link with the INFICON documentation.
+
 Nothing else, it just works. Documentation is properties of INFICON and contains the whole protocol with example codes in BASIC, GNU Octave code proposed here is covered by the repository licence.
 
 ## Because even discontinued devices have the right to do science !

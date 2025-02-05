@@ -17,5 +17,8 @@ The code contains all necessary comments to make a link with the INFICON operati
 
 Nothing else, it just works. Operating manual is properties of INFICON and contains the whole protocol with example codes in BASIC, GNU Octave code proposed here is covered by the repository licence.
 
+## Example of masurement for a given process
+![](/Code/Thickness_vs_time.png)
+
 ## Because even discontinued devices have the right to do science !
 ![](/Documentation/XTM2_Deposition_Monitor.jpg)

@@ -1,10 +1,9 @@
 clear
 clc
 close all
-
 disp('-----------------------------------------------------------')
 disp('|Beware, this code is for GNU Octave ONLY !!!             |')
-disp('|Matlab is not natively able to run it, please update     |')
+disp('|Matlab is not natixvely able to run it, please update     |')
 disp('-----------------------------------------------------------')
 
 %%%%%%%%%%%%%%%%%%%%%%%user parameter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,6 +37,7 @@ for i =1:1:length(list)
         if strcmp(response(1:5),'XTM/2')
             disp(['Microbalance ' ,response(1:end-1),' detected on port ',char(list(i))])%last char is ACK
             valid_port=char(list(i));
+            beep ()
             skip=0;
         end
     end
@@ -80,16 +80,6 @@ if skip==0 %microbalance detected
     response=read(s, 20);
     disp(['////////// Tooling factor set to: ',char(response(1:end-1)),' %']);%last char is ACK
 
-    %Set time to zero
-    write(s, 'R 5');
-    write(s, char(6));%mandatory terminator
-    disp('////////// Timer set to zero');
-
-    %Set Thickness to zero
-    write(s, 'R 4');
-    write(s, char(6));%mandatory terminator
-    disp('////////// Thickness set to zero');
-
     %Measure the crystal life (dead crystal is 1MHz variation over about 60 MHz)
     read(s, 20);%flush serial
     write(s,'S 5'); %query tooling for film 1 (default)
@@ -104,15 +94,19 @@ if skip==0 %microbalance detected
     response=read(s, 20);
     initial_frequency=str2double(char(response(1:end-2)));
     disp(['////////// Crystal current frequency: ',char(response(1:end-1)),' Hz']);
+
+    uiwait(msgbox('Balance ready to run measurement (press x on the console to stop)', 'Microbalance status'))
+
+    %Set time to zero
+    write(s, 'R 5');
+    write(s, char(6));%mandatory terminator
+    disp('////////// Timer set to zero');
+
+    %Set Thickness to zero
+    write(s, 'R 4');
+    write(s, char(6));%mandatory terminator
+    disp('////////// Thickness set to zero');
     disp('////////// End of initialisation procedure !')
-
-
-    disp('Press x to start and stop measurement')
-    while (1)
-        if (kbhit (1) == 'x')
-            break
-        end
-    end
 
     %open the shutter
     write(s, 'R 0');
@@ -190,4 +184,5 @@ if skip==0 %microbalance detected
     saveas(gcf,'Thickness_vs_time.png');
 else %microbalance not detected
     disp('No matching device found, check connection')
+    msgbox('No matching device found, check connection', 'Microbalance status');
 end

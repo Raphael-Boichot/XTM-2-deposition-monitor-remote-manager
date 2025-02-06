@@ -11,7 +11,7 @@ density = '1.000';%4 + point digits mandatory, film density in g/cm3
 z_ratio = '1.000';%4 + point digits mandatory, z-ratio in g/cm3
 %The z-ratio is a parameter that corrects the frequency change due to acoustic impedance mismatsch between deposited film and crystal
 tooling = '100.0';%4 + point digits mandatory, tooling factor in %, take into account real measurements vs the device value, let to 100% by default
-fast_mode = 1;% fast mode deactivates the plot
+fast_mode = 0;% fast mode deactivates the plot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 pkg load instrument-control
@@ -85,7 +85,7 @@ if skip==0 %microbalance detected
     write(s, char(6));%mandatory terminator
     disp('Thickness set to zero');
 
-    %Measure the crystal life
+    %Measure the crystal life (dead crystal is 1MHz variation over about 60 MHz)
     read(s, 20);%flush serial
     write(s,'S 5'); %query tooling for film 1 (default)
     write(s, char(6));%mandatory terminator
@@ -97,6 +97,7 @@ if skip==0 %microbalance detected
     write(s,'S 8'); %query current frequency
     write(s, char(6));%mandatory terminator
     response=read(s, 20);
+    initial_frequency=str2double(char(response(1:end-2)));
     disp(['Crystal current frequency: ',char(response(1:end-1)),' Hz']);
 
     disp('Press x to start and stop measurement')
@@ -127,7 +128,7 @@ if skip==0 %microbalance detected
         write(s, char(6));%mandatory terminator
         %this function is the only way to read the character string fast enough
         response=ReadToTermination(s,char(6));
-        disp(['Thickness: ',char(response(1:end-2)),' kAngstrom']);
+        disp(['Time: ',num2str(toc),' Seconds / Thickness: ',char(response(1:end-2)),' kAngstrom']);
         thickness=[thickness;str2double(char(response(1:end-2)))];
 
         if fast_mode==0
@@ -149,6 +150,22 @@ if skip==0 %microbalance detected
     write(s, 'R 1');
     write(s, char(6));%mandatory terminator
     disp('Shutter closed');
+
+    %Measure the crystal present frequency
+    read(s, 20);%flush serial
+    write(s,'S 8'); %query current frequency
+    write(s, char(6));%mandatory terminator
+    response=read(s, 20);
+    final_frequency=str2double(char(response(1:end-2)));
+    disp(['Crystal current frequency: ',char(response(1:end-1)),' Hz']);
+    disp(['Frequency drift during deposition: ',num2str(final_frequency-initial_frequency),' Hz'])
+
+    %Measure the crystal life (dead crystal is 1MHz variation over about 60 MHz)
+    read(s, 20);%flush serial
+    write(s,'S 5'); %query tooling for film 1 (default)
+    write(s, char(6));%mandatory terminator
+    response=read(s, 20);
+    disp(['Crystal life: ',char(response(1:end-1)),' % (0% is new, 100% is dead)']);
 
     %save the data
     save_data=[time,thickness];

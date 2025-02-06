@@ -4,6 +4,7 @@ close all
 
 disp('-----------------------------------------------------------')
 disp('|Beware, this code is for GNU Octave ONLY !!!             |')
+disp('|Matlab is not natively able to run it, please update     |')
 disp('-----------------------------------------------------------')
 
 %%%%%%%%%%%%%%%%%%%%%%%user parameter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -12,12 +13,15 @@ z_ratio = '1.000';%4 + point digits mandatory, z-ratio in g/cm3
 %The z-ratio is a parameter that corrects the frequency change due to acoustic impedance mismatsch between deposited film and crystal
 tooling = '100.0';%4 + point digits mandatory, tooling factor in %, take into account real measurements vs the device value, let to 100% by default
 fast_mode = 0;% fast mode deactivates the plot
+%DIP Switches configuration : 00000000 00000000 / all zeros, default, no checksum, thickness in kAngstroms
+%                             ---GR1-- ---GR2--
+%using other configuration may change the protocol or accuracy, adapt the code in consequence, see documentation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 pkg load instrument-control
 
 %routine to detect microbalance on serial ports
-%ACK or char(6) is the default terminator for both read and write
+%ACK or char(6) is the default terminator for both read and write if checksum is not used
 list = serialportlist;
 valid_port=[];
 skip=1;
@@ -42,6 +46,7 @@ end
 
 if skip==0 %microbalance detected
     %initialization procedure
+    disp('////////// Initialisation procedure...')
     s = serialport(valid_port,'BaudRate',9600,'dataBits',8,'Parity','none','Stopbits',1);
     set(s, 'timeout',0.1);
 
@@ -53,7 +58,7 @@ if skip==0 %microbalance detected
     write(s,'Q 3 1'); %query density for film 1 (default)
     write(s, char(6));%mandatory terminator
     response=read(s, 20);
-    disp(['Density set to: ',char(response(1:end-1)),' g/cm3']);%last char is ACK
+    disp(['////////// Film density set to: ',char(response(1:end-1)),' g/cm3']);%last char is ACK
 
     %Set the z-ratio and read it back to be sure it is set correctly
     mot = ['U 4 1 ',z_ratio]; %update z-ratio for film 1 (default)
@@ -63,7 +68,7 @@ if skip==0 %microbalance detected
     write(s,'Q 4 1'); %query z-ratio for film 1 (default)
     write(s, char(6));%mandatory terminator
     response=read(s, 20);
-    disp(['Z-ratio set to: ',char(response(1:end-1)),' [-]']);%last char is ACK
+    disp(['////////// Z-ratio set to: ',char(response(1:end-1)),' [-]']);%last char is ACK
 
     %Set the tooling factor and read it back to be sure it is set correctly
     mot = ['U 0 1 ',tooling]; %update tooling for film 1 (default)
@@ -73,24 +78,24 @@ if skip==0 %microbalance detected
     write(s,'Q 0 1'); %query tooling for film 1 (default)
     write(s, char(6));%mandatory terminator
     response=read(s, 20);
-    disp(['Tooling factor set to: ',char(response(1:end-1)),' %']);%last char is ACK
+    disp(['////////// Tooling factor set to: ',char(response(1:end-1)),' %']);%last char is ACK
 
     %Set time to zero
     write(s, 'R 5');
     write(s, char(6));%mandatory terminator
-    disp('Time set to zero');
+    disp('////////// Timer set to zero');
 
     %Set Thickness to zero
     write(s, 'R 4');
     write(s, char(6));%mandatory terminator
-    disp('Thickness set to zero');
+    disp('////////// Thickness set to zero');
 
     %Measure the crystal life (dead crystal is 1MHz variation over about 60 MHz)
     read(s, 20);%flush serial
     write(s,'S 5'); %query tooling for film 1 (default)
     write(s, char(6));%mandatory terminator
     response=read(s, 20);
-    disp(['Crystal life: ',char(response(1:end-1)),' % (0% is new, 100% is dead)']);
+    disp(['////////// Crystal life: ',char(response(1:end-1)),' % (0% is new, 100% is dead)']);
 
     %Measure the crystal present frequency
     read(s, 20);%flush serial
@@ -98,7 +103,9 @@ if skip==0 %microbalance detected
     write(s, char(6));%mandatory terminator
     response=read(s, 20);
     initial_frequency=str2double(char(response(1:end-2)));
-    disp(['Crystal current frequency: ',char(response(1:end-1)),' Hz']);
+    disp(['////////// Crystal current frequency: ',char(response(1:end-1)),' Hz']);
+    disp('////////// End of initialisation procedure !')
+
 
     disp('Press x to start and stop measurement')
     while (1)
@@ -128,7 +135,7 @@ if skip==0 %microbalance detected
         write(s, char(6));%mandatory terminator
         %this function is the only way to read the character string fast enough
         response=ReadToTermination(s,char(6));
-        disp(['Time: ',num2str(toc),' Seconds / Thickness: ',char(response(1:end-2)),' kAngstrom']);
+        disp(['----Time: ',num2str(toc),' Seconds / Thickness: ',char(response(1:end-2)),' kAngstrom----']);
         thickness=[thickness;str2double(char(response(1:end-2)))];
 
         if fast_mode==0

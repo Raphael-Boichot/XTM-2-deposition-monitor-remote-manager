@@ -19,6 +19,7 @@ Nothing else, it just works. Operating manual is properties of INFICON and conta
 
 ## Example of console output
 
+```console
 -----------------------------------------------------------
 |Beware, this code is for GNU Octave ONLY !!!             |
 |Matlab is not natively able to run it, please update     |
@@ -65,6 +66,7 @@ Shutter closed
 Crystal current frequency: 5964591.70 Hz
 Frequency drift during deposition: -0.2 Hz
 Crystal life: 0  % (0% is new, 100% is dead)
+```
 
 ## Example of measurement for a given process
 ![](/Code/Thickness_vs_time.png)

@@ -17,6 +17,55 @@ The code contains all necessary comments to make a link with the INFICON operati
 
 Nothing else, it just works. Operating manual is properties of INFICON and contains the whole protocol with example codes in BASIC, GNU Octave code proposed here is covered by the repository licence.
 
+## Example of console output
+
+-----------------------------------------------------------
+|Beware, this code is for GNU Octave ONLY !!!             |
+|Matlab is not natively able to run it, please update     |
+-----------------------------------------------------------
+Testing port COM1...
+Testing port COM2...
+Testing port COM3...
+Microbalance XTM/2 VERSION 1.50 detected on port COM3
+////////// Initialisation procedure...
+////////// Film density set to:  1.000 g/cm3
+////////// Z-ratio set to: 1.000 [-]
+////////// Tooling factor set to: 100.0 %
+////////// Timer set to zero
+////////// Thickness set to zero
+////////// Crystal life: 0  % (0% is new, 100% is dead)
+////////// Crystal current frequency: 5964591.90 Hz
+////////// End of initialisation procedure !
+Press x to start and stop measurement
+Shutter opened
+Starting acquisition...
+----Time: 0.15302 Seconds / Thickness:  -0.0000 kAngstrom----
+----Time: 1.8999 Seconds / Thickness:  -0.0001 kAngstrom----
+----Time: 2.2053 Seconds / Thickness:  -0.0002 kAngstrom----
+----Time: 2.5043 Seconds / Thickness:  -0.0002 kAngstrom----
+----Time: 2.8035 Seconds / Thickness:  -0.0002 kAngstrom----
+----Time: 3.1397 Seconds / Thickness:  -0.0001 kAngstrom----
+----Time: 3.4397 Seconds / Thickness:   0.0000 kAngstrom----
+----Time: 3.7785 Seconds / Thickness:   0.0000 kAngstrom----
+----Time: 4.0778 Seconds / Thickness:  -0.0000 kAngstrom----
+----Time: 4.3985 Seconds / Thickness:  -0.0001 kAngstrom----
+----Time: 4.6977 Seconds / Thickness:  -0.0001 kAngstrom----
+----Time: 4.9956 Seconds / Thickness:  -0.0001 kAngstrom----
+----Time: 5.2904 Seconds / Thickness:  -0.0000 kAngstrom----
+----Time: 5.5883 Seconds / Thickness:   0.0000 kAngstrom----
+----Time: 5.9019 Seconds / Thickness:   0.0000 kAngstrom----
+----Time: 6.1991 Seconds / Thickness:   0.0000 kAngstrom----
+----Time: 6.5063 Seconds / Thickness:   0.0000 kAngstrom----
+----Time: 6.8022 Seconds / Thickness:   0.0000 kAngstrom----
+----Time: 7.1415 Seconds / Thickness:  -0.0000 kAngstrom----
+----Time: 7.4446 Seconds / Thickness:  -0.0001 kAngstrom----
+----Time: 7.7419 Seconds / Thickness:   0.0000 kAngstrom----
+Stopping acquisition
+Shutter closed
+Crystal current frequency: 5964591.70 Hz
+Frequency drift during deposition: -0.2 Hz
+Crystal life: 0  % (0% is new, 100% is dead)
+
 ## Example of measurement for a given process
 ![](/Code/Thickness_vs_time.png)
 

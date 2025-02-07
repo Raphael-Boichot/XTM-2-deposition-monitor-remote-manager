@@ -29,7 +29,7 @@ for i =1:1:length(list)
     %the communication protocol details can be set from keys on the front panel, see documentation
     s = serialport(char(list(i)),'BaudRate',9600,'dataBits',8,'Parity','none','Stopbits',1);
     set(s, 'timeout',0.1);
-    write(s, 'H');
+    write(s, 'H');%Hello command
     write(s, char(6));%mandatory terminator, char(6) is ACK, if something is wrong, the monitor returns NACK + an error code, see documentation
     %here I rely on Timeout to be sure to get all the character string. It's not optimal but the GNU Octave library is not as practical as the Matlab one
     response=char(read(s, 20));
@@ -65,7 +65,7 @@ if protocol_failure==0 %microbalance detected
 
     if crystal_failure==0
         %Set the density and read it back to be sure it is set correctly
-        mot = ['U 3 1 ',density]; %update density for film 1 (default)
+        mot = ['U 3 1 ',density]; %update density for film 1 (default), the space is mandatory
         write(s,mot);
         write(s, char(6));%mandatory terminator
         read(s, 20);%flush serial
@@ -75,7 +75,7 @@ if protocol_failure==0 %microbalance detected
         disp(['////////// Film density set to: ',char(response(1:end-1)),' g/cm3']);%last char is ACK
 
         %Set the z-ratio and read it back to be sure it is set correctly
-        mot = ['U 4 1 ',z_ratio]; %update z-ratio for film 1 (default)
+        mot = ['U 4 1 ',z_ratio]; %update z-ratio for film 1 (default), the space is mandatory
         write(s,mot);
         write(s, char(6));%mandatory terminator
         read(s, 20);%flush serial
@@ -85,11 +85,11 @@ if protocol_failure==0 %microbalance detected
         disp(['////////// Z-ratio set to: ',char(response(1:end-1)),' [-]']);%last char is ACK
 
         %Set the tooling factor and read it back to be sure it is set correctly
-        mot = ['U 0 1 ',tooling]; %update tooling for film 1 (default)
+        mot = ['U 0 1 ',tooling]; %update tooling for film 1 (default), the space is mandatory
         write(s,mot);
         write(s, char(6));%mandatory terminator
         read(s, 20);%flush serial
-        write(s,'Q 0 1'); %query tooling for film 1 (default)
+        write(s,'Q 0 1'); %query tooling factor for film 1 (default)
         write(s, char(6));%mandatory terminator
         response=read(s, 20);
         disp(['////////// Tooling factor set to: ',char(response(1:end-1)),' %']);%last char is ACK

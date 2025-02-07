@@ -3,7 +3,7 @@ clc
 close all
 disp('-----------------------------------------------------------')
 disp('|Beware, this code is for GNU Octave ONLY !!!             |')
-disp('|Matlab is not natixvely able to run it, please update     |')
+disp('|Matlab is not natively able to run it, please update     |')
 disp('-----------------------------------------------------------')
 
 %%%%%%%%%%%%%%%%%%%%%%%user parameter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -96,7 +96,7 @@ if protocol_failure==0 %microbalance detected
         response=read(s, 20);
         disp(['////////// Tooling factor set to: ',char(response(1:end-1)),' %']);%last char is ACK
 
-        %Measure the crystal life (dead crystal is 1MHz variation over about 60 MHz)
+        %Measure the crystal life (dead crystal is 1MHz variation over about 6MHz with our crytal holder + head)
         read(s, 20);%flush serial
         write(s,'S 5'); %query tooling for film 1 (default)
         write(s, char(6));%mandatory terminator
@@ -104,15 +104,16 @@ if protocol_failure==0 %microbalance detected
         disp(['////////// Crystal life: ',char(response(1:end-1)),' % (0% is new, 100% is dead)']);
 
         %Measure the crystal present frequency
-        %some to myself 2025: the frequency is negative in case of crystal failure, positive with a space (theoretically) if OK
+        %note to myself 2025: the frequency is negative in case of crystal failure, positive with a space (theoretically) if OK
         %I see the '-' in case of crystal failure but no ' ' in case of crystal pass, must be an issue with the documentation or a quirk with Octave...
-        %Part from that the protocol is the one described in the documentation
+        %hopefully, crystal failure skips this part...
+        %Apart from that the protocol is more or less the one described in the documentation
         read(s, 20);%flush serial
         write(s,'S 8'); %query current frequency
         write(s, char(6));%mandatory terminator
         response=read(s, 20);
         initial_frequency=str2double(char(response(1:end-2)));
-        disp(['////////// Crystal current frequency: ',char(response(1:end-1)),' Hz']);
+        disp(['////////// Crystal current frequency: ',char(response(1:end-1)),' Hz (6000000.00 Hz when new)']);
 
         uiwait(msgbox('Balance ready to run measurement (press x on the console to stop)', 'Microbalance status'))
 
@@ -144,9 +145,10 @@ if protocol_failure==0 %microbalance detected
             counter=counter+1;
             pause(0.1)%no need to spam the serial, microbalance is not able to spit more than 10 points per second
             time=[time;toc];
+            %you can query all parameters at once with 'S 0' but I always got an incomplete listing, not sure why
             write(s,'S 2'); %query thickness for film 1 (default)
             write(s, char(6));%mandatory terminator
-            %this function is the only way to read the character string fast enough
+            %this function is the only way to read the character string fast enough without supposing a length which is not practical
             response=ReadToTermination(s,char(6));
             disp(['----Time: ',num2str(toc),' Seconds / Thickness: ',char(response(1:end-2)),' kAngstrom----']);
             thickness=[thickness;str2double(char(response(1:end-2)))];
@@ -177,7 +179,7 @@ if protocol_failure==0 %microbalance detected
         write(s, char(6));%mandatory terminator
         response=read(s, 20);
         final_frequency=str2double(char(response(1:end-2)));
-        disp(['Crystal current frequency: ',char(response(1:end-1)),' Hz']);
+        disp(['Crystal current frequency: ',char(response(1:end-1)),' Hz (6000000.00 Hz when new)']);
         disp(['Frequency drift during deposition: ',num2str(final_frequency-initial_frequency),' Hz'])
 
         %Measure the crystal life (dead crystal is 1MHz variation over about 60 MHz)

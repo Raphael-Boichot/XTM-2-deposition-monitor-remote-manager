@@ -3,7 +3,7 @@ clc
 close all
 disp('-----------------------------------------------------------')
 disp('|Beware, this code is for GNU Octave ONLY !!!             |')
-disp('|Matlab is not natively able to run it, please update     |')
+disp('|Matlab is not natixvely able to run it, please update     |')
 disp('-----------------------------------------------------------')
 
 %%%%%%%%%%%%%%%%%%%%%%%user parameter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,6 +49,13 @@ if skip==0 %microbalance detected
     disp('////////// Initialisation procedure...')
     s = serialport(valid_port,'BaudRate',9600,'dataBits',8,'Parity','none','Stopbits',1);
     set(s, 'timeout',0.1);
+
+##    %query the status of crytal
+##    read(s, 20);%flush serial
+##    write(s,'S 9'); %query crystal fail
+##    write(s, char(6));%mandatory terminator
+##    response=read(s, 20);
+##    disp(['////////// Crystal current frequency: ',char(response(1:end-1)),' Hz']);
 
     %Set the density and read it back to be sure it is set correctly
     mot = ['U 3 1 ',density]; %update density for film 1 (default)

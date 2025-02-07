@@ -1,3 +1,4 @@
+%Raphaël BOICHOT february 2025
 clear
 clc
 close all
@@ -27,6 +28,7 @@ protocol_failure=1;
 for i =1:1:length(list)
     disp(['Testing port COM',num2str(i),'...'])
     %the communication protocol details can be set from keys on the front panel, see documentation
+    %here I set the maximum baudrate which is the case '3' from the front panel. In case of internal battery loss, the device uses case '1' (2400 bauds) by default
     s = serialport(char(list(i)),'BaudRate',9600,'dataBits',8,'Parity','none','Stopbits',1);
     set(s, 'timeout',0.1);
     write(s, 'H');%Hello command
@@ -102,6 +104,9 @@ if protocol_failure==0 %microbalance detected
         disp(['////////// Crystal life: ',char(response(1:end-1)),' % (0% is new, 100% is dead)']);
 
         %Measure the crystal present frequency
+        %some to myself 2025: the frequency is negative in case of crystal failure, positive with a space (theoretically) if OK
+        %I see the '-' in case of crystal failure but no ' ' in case of crystal pass, must be an issue with the documentation or a quirk with Octave...
+        %Part from that the protocol is the one described in the documentation
         read(s, 20);%flush serial
         write(s,'S 8'); %query current frequency
         write(s, char(6));%mandatory terminator

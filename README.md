@@ -73,3 +73,12 @@ Crystal life: 0  % (0% is new, 100% is dead)
 
 ## Because even discontinued devices have the right to do science !
 ![](/Documentation/XTM2_Deposition_Monitor.jpg)
+
+## Setup used for testing
+- A physical serial port with RS232 cable (DB9 sockets on both ends)
+- A XTM/2 Deposition Monitor with ROM version 1.50
+- A Crystal Interface Unit 757-302-G1
+- A BNC to BNC cable 755-257-G6
+- A Conflat Flange Feedthrough 206-878-G2 (BNC to microdot connector)
+- A Front Load Single Sensor SL-A0E00
+- Some 6MHz gold coated crystals 750-1000-G10
